@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paulo Baleeiro | Perito Documental</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0c1a2e;
+      --navy-mid: #142338;
+      --navy-light: #1c3050;
+      --gold: #b8963e;
+      --gold-light: #d4ae5a;
+      --gold-pale: #e8d49a;
+      --cream: #f5f0e8;
+      --text: #1a2535;
+      --text-muted: #5a6a7e;
+      --white: #ffffff;
+      --line: rgba(184,150,62,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      background: rgba(12, 26, 46, 0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      transition: all 0.3s ease;
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav-brand .name {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-brand .subtitle {
+      font-family: 'Barlow', sans-serif;
+      color: var(--gold-light);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .nav-cta {
+      background: none;
+      border: 1px solid var(--gold);
+      color: var(--gold-light) !important;
+      padding: 8px 20px;
+      border-radius: 2px;
+      font-size: 11px !important;
+      letter-spacing: 0.16em !important;
+      transition: all 0.25s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold) !important;
+      color: var(--navy) !important;
+    }
+
+    /* ── HERO ── */
+    #inicio {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 48px 80px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 50%, rgba(184,150,62,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 80% at -10% 60%, rgba(28,48,80,0.8) 0%, transparent 60%);
+    }
+
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-lines::before, .hero-lines::after {
+      content: '';
+      position: absolute;
+      background: var(--line);
+    }
+
+    .hero-lines::before {
+      width: 1px;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+    }
+
+    .hero-lines::after {
+      height: 1px;
+      left: 0;
+      right: 0;
+      top: 50%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-label::before {
+      content: '';
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    h1.hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(48px, 7vw, 88px);
+      color: var(--white);
+      line-height: 1.0;
+      font-weight: 700;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.4s;
+    }
+
+    h1.hero-title span {
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
+    .hero-subtitle {
+      font-family: 'Barlow', sans-serif;
+      font-size: clamp(14px, 2vw, 18px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.55s;
+    }
+
+    .hero-desc {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.78;
+      max-width: 560px;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.7s;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.85s;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--navy);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(184,150,62,0.3);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.3);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: fadeUp 1s ease forwards 1.2s, bounce 2s ease 2s infinite;
+      opacity: 0;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      background: var(--navy-mid);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 36px 48px;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .stat-item {
+      flex: 1;
+      max-width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 32px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 48px; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      max-width: 48px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    h2.section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .section-lead {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      max-width: 620px;
+    }
+
+    /* ── SOBRE ── */
+    #sobre {
+      background: var(--white);
+    }
+
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .sobre-left h2 { color: var(--navy); }
+
+    .sobre-body {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--text-muted);
+    }
+
+    .sobre-body p + p { margin-top: 20px; }
+
+    .sobre-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-top: 56px;
+    }
+
+    .value-card {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 24px 28px;
+      border: 1px solid rgba(12,26,46,0.08);
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+      background: var(--cream);
+      transition: all 0.25s;
+    }
+
+    .value-card:hover {
+      border-left-color: var(--navy);
+      transform: translateX(4px);
+      box-shadow: 4px 0 24px rgba(12,26,46,0.06);
+    }
+
+    .value-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    .value-text h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .value-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── ESPECIALIDADES ── */
+    #especialidades {
+      background: var(--cream);
+    }
+
+    #especialidades h2 { color: var(--navy); }
+
+    .espec-intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 64px;
+      gap: 40px;
+    }
+
+    .espec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--line);
+    }
+
+    .espec-card {
+      background: var(--white);
+      padding: 52px 48px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .espec-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .espec-card:hover::before { transform: scaleX(1); }
+
+    .espec-card:hover {
+      box-shadow: 0 20px 60px rgba(12,26,46,0.1);
+      z-index: 1;
+      transform: translateY(-4px);
+    }
+
+    .espec-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: rgba(12,26,46,0.04);
+      line-height: 1;
+      position: absolute;
+      top: 24px;
+      right: 36px;
+      user-select: none;
+    }
+
+    .espec-tag {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--gold-light);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 2px;
+      margin-bottom: 24px;
+    }
+
+    .espec-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .espec-card p {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .espec-uses {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .espec-uses li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .espec-uses li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── PROCESSO ── */
+    #processo {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #processo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 100% 0%, rgba(184,150,62,0.06) 0%, transparent 60%);
+    }
+
+    #processo h2 { color: var(--white); }
+    #processo .section-lead { color: rgba(255,255,255,0.5); }
+
+    .processo-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: rgba(255,255,255,0.04);
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .step {
+      background: var(--navy-mid);
+      padding: 40px 32px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .step:hover { background: var(--navy-light); }
+
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-num::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .step h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.7;
+    }
+
+    /* ── CONTATO ── */
+    #contato {
+      background: var(--white);
+    }
+
+    .contato-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    #contato h2 { color: var(--navy); }
+
+    .contato-body {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      border: 1px solid rgba(12,26,46,0.08);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.25s;
+      background: var(--cream);
+    }
+
+    .contact-item:hover {
+      border-color: var(--gold);
+      background: var(--white);
+      transform: translateX(4px);
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .contact-item-info label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .contact-item-info span {
+      font-family: 'Lora', serif;
+      font-size: 15px;
+      color: var(--navy);
+    }
+
+    .contato-right {
+      background: var(--navy);
+      padding: 56px 48px;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contato-right::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+    }
+
+    .contato-right::after {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 240px;
+      height: 240px;
+      border: 1px solid rgba(184,150,62,0.1);
+      border-radius: 50%;
+    }
+
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 96px;
+      color: var(--gold);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: -16px;
+    }
+
+    .contato-quote {
+      font-family: 'Lora', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.75;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contato-quote-author {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 16px 28px;
+      border-radius: 2px;
+      margin-top: 32px;
+      transition: all 0.25s;
+    }
+
+    .whatsapp-btn:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(37,211,102,0.3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--line);
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand .name {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .footer-brand .tagline {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-top: 4px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold-light); }
+
+    .footer-copy {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.34s; }
+    .reveal-delay-4 { transition-delay: 0.46s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      section { padding: 72px 24px; }
+      #inicio { padding: 100px 24px 60px; }
+      .sobre-grid, .contato-grid, .espec-grid { grid-template-columns: 1fr; gap: 40px; }
+      .espec-grid { background: transparent; gap: 20px; }
+      .espec-card { border: 1px solid rgba(12,26,46,0.1); }
+      .processo-steps { grid-template-columns: 1fr 1fr; }
+      .stats-band { flex-wrap: wrap; gap: 24px; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+      footer { flex-direction: column; text-align: center; padding: 32px 24px; }
+      .footer-links { display: none; }
+      .espec-intro { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      .processo-steps { grid-template-columns: 1fr; }
+      h1.hero-title { font-size: 40px; }
+      .contato-right { padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">
+      <span class="name">Paulo Baleeiro</span>
+      <span class="subtitle">Perito Documental</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#especialidades">Especialidades</a></li>
+      <li><a href="#processo">Processo</a></li>
+      <li><a href="#contato" class="nav-cta">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="inicio">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-content">
+      <div class="hero-label">Perito Judicial & Assistência Técnica</div>
+      <h1 class="hero-title">Paulo<br><span>Baleeiro</span></h1>
+      <p class="hero-subtitle">Grafoscopia · Documentoscopia</p>
+      <p class="hero-desc">
+        Análise técnica de assinaturas, manuscritos e documentos com rigor metodológico, objetividade e compromisso com a verdade pericial.
+      </p>
+      <div class="hero-actions">
+        <a href="#contato" class="btn-primary">
+          <span>Solicitar Perícia</span>
+          <span>→</span>
+        </a>
+        <a href="#especialidades" class="btn-secondary">
+          <span>Ver Especialidades</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stat-item reveal">
+      <span class="stat-num">2</span>
+      <span class="stat-label">Especialidades Periciais</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <span class="stat-num">100<span style="font-size:22px">%</span></span>
+      <span class="stat-label">Rigor Metodológico</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Atualização Técnica</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <span class="stat-num">OAB</span>
+      <span class="stat-label">Atendimento a Advogados</span>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="section-inner">
+      <div class="sobre-grid">
+        <div class="sobre-left reveal">
+          <div class="section-eyebrow">Quem sou eu</div>
+          <h2 class="section-title">Comprometido com<br>a precisão técnica</h2>
+          <div class="sobre-body">
+            <p>
+              Sou Paulo Roberto Baleeiro, graduado em Direito, e atuo como Perito Documental com foco em <strong>grafoscopia</strong> e <strong>documentoscopia</strong>. Meu trabalho é voltado à verificação de autenticidade de assinaturas, manuscritos e documentos — utilizando metodologia técnica para auxiliar na produção de prova em demandas judiciais e extrajudiciais.
+            </p>
+            <p>
+              Além de Perito Judicial, minha atuação é direcionada ao atendimento de advogados, empresas e particulares que necessitam de suporte especializado em questões de autenticidade documental.
+            </p>
+            <p>
+              Acredito que a perícia técnica deve ser conduzida com responsabilidade e rigor metodológico, sempre prezando pela clareza das conclusões e pela confiabilidade do laudo entregue.
+            </p>
+          </div>
+        </div>
+        <div class="sobre-right reveal reveal-delay-1">
+          <div class="value-card">
+            <div class="value-icon">⚖️</div>
+            <div class="value-text">
+              <h4>Rigor Metodológico</h4>
+              <p>Cada exame segue protocolo técnico estabelecido, garantindo conclusões fundadas e defensáveis.</p>
+            </div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🔍</div>
+            <div class="value-text">
+              <h4>Análise Individualizada</h4>
+              <p>Cada documento possui relevância única — por isso cada exame é conduzido de forma individualizada.</p>
+            </div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">📄</div>
+            <div class="value-text">
+              <h4>Laudos Claros</h4>
+              <p>Conclusões técnicas apresentadas com linguagem objetiva e acessível ao operador do Direito.</p>
+            </div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🎓</div>
+            <div class="value-text">
+              <h4>Atualização Constante</h4>
+              <p>Busca permanente por aperfeiçoamento técnico alinhado às melhores práticas periciais.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESPECIALIDADES -->
+  <section id="especialidades">
+    <div class="section-inner">
+      <div class="espec-intro reveal">
+        <div>
+          <div class="section-eyebrow">Áreas de Atuação</div>
+          <h2 class="section-title">Especialidades<br>Periciais</h2>
+        </div>
+        <p class="section-lead">Dois ramos complementares da perícia documental para garantir análise completa e fundamentada.</p>
+      </div>
+      <div class="espec-grid">
+
+        <div class="espec-card reveal">
+          <div class="espec-num">01</div>
+          <div class="espec-tag">Escrita Manuscrita</div>
+          <h3>Grafoscopia</h3>
+          <p>
+            Análise técnica da escrita manuscrita com objetivo de verificar a autenticidade de assinaturas, rubricas e textos. Por meio da comparação de padrões gráficos, identificam-se características individuais como inclinação, pressão, velocidade e formação das letras.
+          </p>
+          <ul class="espec-uses">
+            <li>Contratos e procurações</li>
+            <li>Cheques e recibos</li>
+            <li>Testamentos</li>
+            <li>Documentos particulares</li>
+            <li>Declarações e correspondências</li>
+          </ul>
+        </div>
+
+        <div class="espec-card reveal reveal-delay-1">
+          <div class="espec-num">02</div>
+          <div class="espec-tag">Documentos Físicos</div>
+          <h3>Documentoscopia</h3>
+          <p>
+            Exame técnico de documentos para identificar adulterações, falsificações e alterações. A análise envolve verificação de tintas, impressões, papéis, rasuras, sobreposições, cortes, colagens e demais características materiais do documento.
+          </p>
+          <ul class="espec-uses">
+            <li>Certidões e documentos públicos</li>
+            <li>Identidades e comprovantes</li>
+            <li>Contratos empresariais</li>
+            <li>Cheques e títulos</li>
+            <li>Documentos digitalizados</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESSO -->
+  <section id="processo">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-eyebrow" style="color:var(--gold)">Como Funciona</div>
+        <h2 class="section-title">Do Contato ao<br>Laudo Pericial</h2>
+        <p class="section-lead">Um processo estruturado para garantir a qualidade técnica em cada etapa da análise.</p>
+      </div>
+      <div class="processo-steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-num">01</div>
+          <h4>Consulta Inicial</h4>
+          <p>Apresentação do caso e análise de viabilidade. Esclarecimento de dúvidas sobre o objeto da perícia.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-num">02</div>
+          <h4>Recebimento do Material</h4>
+          <p>Coleta ou envio dos documentos a serem examinados, com protocolo de preservação da cadeia de custódia.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-num">03</div>
+          <h4>Exame Técnico</h4>
+          <p>Análise pericial com metodologia técnica, uso de equipamentos adequados e abordagem comparativa criteriosa.</p>
+        </div>
+        <div class="step reveal reveal-delay-4">
+          <div class="step-num">04</div>
+          <h4>Entrega do Laudo</h4>
+          <p>Laudo técnico fundamentado, com conclusões claras e objetivas, pronto para ser utilizado como prova.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="section-inner">
+      <div class="contato-grid">
+        <div class="reveal">
+          <div class="section-eyebrow">Fale Comigo</div>
+          <h2 class="section-title">Entre em<br>Contato</h2>
+          <p class="contato-body">
+            Atendimento realizado com profissionalismo, discrição e compromisso com a qualidade técnica em cada demanda. Estou disponível para advogados, empresas e particulares.
+          </p>
+          <div class="contact-items">
+            <a href="mailto:paulobaleeiropericia@gmail.com" class="contact-item">
+              <div class="contact-icon">✉️</div>
+              <div class="contact-item-info">
+                <label>E-mail</label>
+                <span>paulobaleeiropericia@gmail.com</span>
+              </div>
+            </a>
+            <a href="tel:+5577981042121" class="contact-item">
+              <div class="contact-icon">📞</div>
+              <div class="contact-item-info">
+                <label>Telefone</label>
+                <span>(77) 98104-2121</span>
+              </div>
+            </a>
+            <a href="https://wa.me/5577981042121" target="_blank" class="contact-item">
+              <div class="contact-icon">💬</div>
+              <div class="contact-item-info">
+                <label>WhatsApp</label>
+                <span>(77) 98104-2121</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="contato-right reveal reveal-delay-1">
+          <div class="quote-mark">"</div>
+          <p class="contato-quote">
+            A prova técnica pericial não substitui o trabalho do advogado — ela o fortalece. Meu compromisso é fornecer o suporte técnico que o seu caso merece.
+          </p>
+          <div class="contato-quote-author">— Paulo Baleeiro, Perito Documental</div>
+          <a href="https://wa.me/5577981042121?text=Ol%C3%A1%2C%20Paulo!%20Tenho%20interesse%20em%20solicitar%20uma%20per%C3%ADcia." target="_blank" class="whatsapp-btn">
+            <span>💬</span>
+            <span>Chamar no WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="name">Paulo Baleeiro</div>
+      <div class="tagline">Perito Documental · Grafoscopia · Documentoscopia</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#especialidades">Especialidades</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 Paulo Roberto Baleeiro</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Nav shadow on scroll
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.boxShadow = window.scrollY > 20
+        ? '0 4px 40px rgba(0,0,0,0.4)'
+        : 'none';
+    });
+
+    // Smooth anchor clicks
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>
